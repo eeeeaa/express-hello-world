@@ -8,6 +8,12 @@ const exampleMidware = function (req, res, next) {
   next();
 };
 
+const requestTime = (req, res, next) => {
+  req.requestTime = Date.now();
+  next();
+};
+
 module.exports = {
   exampleMidware,
+  requestTime,
 };
