@@ -8,6 +8,8 @@ require("dotenv").config();
 const app = express();
 const port = process.env.PORT;
 
+app.set("json spaces", 2);
+
 // Function added with use() for all routes and verbs
 //Note: the order of middleware is important
 //usually use/middleware -> routing -> error handling

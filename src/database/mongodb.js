@@ -1,39 +1,27 @@
-const MongoClient = require("mongodb").MongoClient;
+const mongoose = require("mongoose");
 require("dotenv").config();
 
 const connectionString = process.env.ATLAS_URI || "";
-const client = new MongoClient(connectionString);
 
-async function connect() {
-  let db = null;
-  try {
-    let connection = await client.connect();
-    db = connection.db("sample_training");
-  } catch (e) {
-    console.error(e);
-  }
-  return db;
-}
-
-async function close() {
-  client.close();
-}
+const postSchema = new mongoose.Schema({
+  body: String,
+  permalink: String,
+  author: String,
+  title: String,
+  tags: [String],
+  comments: [{ body: String, email: String, author: String }],
+  date: Date,
+});
 
 async function getPosts() {
-  let db = await connect();
-  let results = [];
-  if (db !== null) {
-    let collection = db.collection("posts");
-    await collection
-      .find({})
-      .limit(1)
-      .toArray((err, data) => {
-        if (err) throw err;
-        results = data;
-        close();
-      });
+  try {
+    await mongoose.connect(connectionString, { dbName: "sample_training" });
+  } catch (error) {
+    console.log(error);
   }
-  return results;
+  const PostModel = mongoose.model("posts", postSchema);
+  const result = await PostModel.findOne({});
+  return result;
 }
 
 module.exports = {
