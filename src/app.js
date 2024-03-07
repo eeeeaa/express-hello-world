@@ -36,11 +36,15 @@ app.get("/", (req, res) => {
   });
 });
 
+//some status i.e. 404 status are not treat as error,
+//use regular middleware function for this instead
+app.use((req, res, next) => {
+  res.status(404).send("not found!");
+});
+
 //custom error handler with 4 arguments middleware
 //if not create this, express will call default error handler
 //call last, after all use and route calls
-//Note: will only call for when you explicitly
-//pass next(error) from the preivous handler
 app.use(function (err, req, res, next) {
   console.error(err.stack);
   res.status(500).send("Something broke!");
