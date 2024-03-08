@@ -19,7 +19,9 @@ async function getPosts() {
   } catch (error) {
     console.log(error);
   }
-  const PostModel = mongoose.model("posts", postSchema);
+  //Mongoose automatically looks for the plural, lowercased version of your model name
+  //i.e. Post --> look for collection named "posts"
+  const PostModel = mongoose.model("Post", postSchema);
   const result = await PostModel.findOne({});
   return result;
 }
